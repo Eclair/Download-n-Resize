@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <RelativeLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="#ff373737">
+
+        <TextView android:id="@+id/urlLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="@string/image_url"
+            android:textSize="10pt"
+            android:textStyle="bold"/>
+
+        <EditText android:id="@+id/urlField"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:lines="1"
+            android:maxLines="1"
+            android:inputType="textUri"
+            android:layout_below="@id/urlLabel"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="40dp"/>
+
+        <ImageButton android:id="@+id/downloadButton"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/download_button"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_below="@id/urlLabel"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+    <ListView android:id="@+id/tasksListView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+
+</LinearLayout>
+
