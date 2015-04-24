@@ -1,3 +1,15 @@
+# Mac OS X
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
 # Built application files
 *.apk
 *.ap_
