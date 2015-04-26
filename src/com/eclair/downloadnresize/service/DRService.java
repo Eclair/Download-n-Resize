@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.IBinder;
+import com.eclair.downloadnresize.helpers.DRBitmapResizer;
+import com.eclair.downloadnresize.helpers.DRGallerySave;
 import com.eclair.downloadnresize.helpers.DRReporter;
 import com.eclair.downloadnresize.models.Task;
 import com.eclair.downloadnresize.network.ImageDownloadAsyncTask;
@@ -31,6 +33,8 @@ public class DRService extends Service {
     private final DRBinder binder = new DRBinder();
     private List<Task> taskList;
     private WeakReference<ServiceListener> listener;
+    private final int ImageWidth = 320;
+    private final int ImageHeight = 480;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -55,6 +59,14 @@ public class DRService extends Service {
         return newTask;
     }
 
+    private void resizeBitmapImageForTask(int taskId) {
+        taskList.get(taskId).bitmap = DRBitmapResizer.resizeBitmapToSize(taskList.get(taskId).bitmap, ImageWidth, ImageHeight);
+
+        if (listener.get() != null) {
+            listener.get().onTaskUpdate(taskList.get(taskId));
+        }
+    }
+
     private ImageDownloadAsyncTask.ImageDownloadProgressUpdate progressUpdate = new ImageDownloadAsyncTask.ImageDownloadProgressUpdate() {
         @Override
         public void onProgressUpdate(int taskId, float progress) {
@@ -66,11 +78,11 @@ public class DRService extends Service {
 
         @Override
         public void onSuccess(int taskId, Bitmap bitmap) {
-            taskList.get(taskId).state = Task.TaskState.Resizing;
+            taskList.get(taskId).bitmap = bitmap;
             if (listener.get() != null) {
                 listener.get().onTaskUpdate(taskList.get(taskId));
             }
-            // TODO: Implement bitmap resizing
+            resizeBitmapImageForTask(taskId);
         }
 
         @Override

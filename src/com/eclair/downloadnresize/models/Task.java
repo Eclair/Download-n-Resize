@@ -1,7 +1,6 @@
 package com.eclair.downloadnresize.models;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 
 import java.net.URL;
 
@@ -29,7 +28,6 @@ public class Task {
     public String stateToDisplay() {
         switch (state) {
             case Downloading: return "Downloading...";
-            case Resizing: return "Resizing...";
             default: return state.toString();
         }
     }
@@ -37,7 +35,6 @@ public class Task {
     public enum TaskState {
         Unknown,
         Downloading,
-        Resizing,
         Failed,
         Done
     };

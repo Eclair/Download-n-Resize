@@ -79,6 +79,7 @@ public class MainActivity extends Activity {
             if (isServiceBound) {
                 Task task = boundService.startImageDownload(imageURL);
                 taskListAdapter.addTask(task);
+                DRReporter.reportTaskStatus(this, task.id, "Created");
             } else {
                 DRReporter.reportError(this, "Service unbound");
             }
