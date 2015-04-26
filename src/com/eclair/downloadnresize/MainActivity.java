@@ -69,8 +69,12 @@ public class MainActivity extends Activity {
 
     private void startDownloadTask(URL imageURL) {
         if (imageURL != null) {
-            int newTaskId = boundService.startImageDownload(imageURL);
-            DRReporter.reportTaskStatus(this, newTaskId, "Created");
+            if (boundService != null) {
+                int newTaskId = boundService.startImageDownload(imageURL);
+                DRReporter.reportTaskStatus(this, newTaskId, "Created");
+            } else {
+                DRReporter.reportError(this, "Service unbound");
+            }
         } else {
             DRReporter.reportError(this, "Can't cast string to URL");
         }
@@ -100,6 +104,7 @@ public class MainActivity extends Activity {
         if (isServiceBound) {
             unbindService(serviceConnection);
             isServiceBound = false;
+            boundService = null;
             DRReporter.reportServiceStatus(this, "Service Stopped");
         }
     }
