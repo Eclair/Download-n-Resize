@@ -17,6 +17,27 @@
             android:textSize="10pt"
             android:textStyle="bold"/>
 
+        <ImageButton android:id="@+id/downloadButton"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/download_button"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/urlLabel"
+            android:layout_alignParentRight="true"/>
+
+        <ImageButton android:id="@+id/clearButton"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/clear_button"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:layout_marginLeft="10dp"
+            android:layout_below="@id/urlLabel"
+            android:layout_toStartOf="@id/downloadButton"
+            android:layout_toLeftOf="@id/downloadButton"/>
+
         <EditText android:id="@+id/urlField"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -26,16 +47,8 @@
             android:inputType="textUri"
             android:layout_below="@id/urlLabel"
             android:layout_alignParentLeft="true"
-            android:layout_marginRight="40dp"/>
-
-        <ImageButton android:id="@+id/downloadButton"
-            android:layout_width="34dp"
-            android:layout_height="34dp"
-            android:src="@drawable/download_button"
-            android:scaleType="fitCenter"
-            android:background="@null"
-            android:layout_below="@id/urlLabel"
-            android:layout_alignParentRight="true"/>
+            android:layout_toStartOf="@id/clearButton"
+            android:layout_toLeftOf="@id/clearButton"/>
 
     </RelativeLayout>
 

@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 public class MainActivity extends Activity {
     private EditText urlField;
     private ImageButton downloadButton;
+    private ImageButton clearButton;
     private ListView tasksListView;
 
     private boolean isServiceBound;
@@ -42,11 +43,19 @@ public class MainActivity extends Activity {
                 processUserInput(urlField.getText().toString().trim());
             }
         });
+
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                urlField.setText("");
+            }
+        });
     }
 
     private void bindWidgets() {
         urlField = (EditText)findViewById(R.id.urlField);
         downloadButton = (ImageButton)findViewById(R.id.downloadButton);
+        clearButton = (ImageButton)findViewById(R.id.clearButton);
         tasksListView = (ListView)findViewById(R.id.tasksListView);
     }
 
