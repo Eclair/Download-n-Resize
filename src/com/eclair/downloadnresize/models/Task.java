@@ -22,6 +22,7 @@ public class Task {
         Unknown,
         Downloading,
         Resizing,
+        Failed,
         Done
     };
 }
