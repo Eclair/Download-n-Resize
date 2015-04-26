@@ -9,6 +9,7 @@ import android.widget.Toast;
  */
 public class DRReporter {
     final static String TAG_REPORTER = "DRReporter";
+    static Toast currentToast;
 
     public static void reportError(Context context, String message) {
         report(context, "Error:", message);
@@ -19,7 +20,15 @@ public class DRReporter {
     }
 
     private static void report(Context context, String type, String message) {
-        Toast.makeText(context, type + " " + message, Toast.LENGTH_SHORT).show();
+        showToast(Toast.makeText(context, type + " " + message, Toast.LENGTH_SHORT));
         Log.d(TAG_REPORTER, type + " " + message);
+    }
+
+    private static void showToast(Toast toast) {
+        if (currentToast != null) {
+            currentToast.cancel();
+        }
+        currentToast = toast;
+        currentToast.show();
     }
 }
