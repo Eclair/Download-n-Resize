@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/startService"
+    <item android:id="@+id/startServiceAction"
         android:title="@string/start_service"
         android:showAsAction="never"/>
-    <item android:id="@+id/stopService"
+    <item android:id="@+id/stopServiceAction"
         android:title="@string/stop_service"
         android:showAsAction="never"/>
 </menu>

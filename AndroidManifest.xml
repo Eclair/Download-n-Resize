@@ -9,6 +9,7 @@
 
     <application android:label="@string/app_name"
         android:icon="@drawable/ic_launcher">
+
         <activity android:name="MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -18,5 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <service android:label="@string/service_name"
+            android:name=".service.DRService"
+            android:icon="@drawable/ic_launcher">
+        </service>
+
     </application>
 </manifest>
