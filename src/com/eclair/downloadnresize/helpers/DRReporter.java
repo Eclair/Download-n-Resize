@@ -19,6 +19,10 @@ public class DRReporter {
         report(context, "Service:", status);
     }
 
+    public static void reportTaskStatus(Context context, int taskId, String status) {
+        report(context, "Task#" + taskId + ":", status);
+    }
+
     private static void report(Context context, String type, String message) {
         showToast(Toast.makeText(context, type + " " + message, Toast.LENGTH_SHORT));
         Log.d(TAG_REPORTER, type + " " + message);

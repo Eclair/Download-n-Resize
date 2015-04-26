@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Patterns;
@@ -18,6 +17,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import com.eclair.downloadnresize.helpers.DRReporter;
 import com.eclair.downloadnresize.service.DRService;
+
+import java.net.URL;
+import java.net.MalformedURLException;
 
 public class MainActivity extends Activity {
     private EditText urlField;
@@ -37,12 +39,7 @@ public class MainActivity extends Activity {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String URL = urlField.getText().toString().trim();
-                if (isValidURL(URL)) {
-                    boundService.startImageDownload(Uri.parse(URL));
-                } else {
-                    DRReporter.reportError(MainActivity.this, "Invalid URL");
-                }
+                processUserInput(urlField.getText().toString().trim());
             }
         });
     }
@@ -53,8 +50,33 @@ public class MainActivity extends Activity {
         tasksListView = (ListView)findViewById(R.id.tasksListView);
     }
 
+    private void processUserInput(String urlString) {
+        if (isValidURL(urlString)) {
+            startDownloadTask(urlFromString(urlString));
+        } else {
+            DRReporter.reportError(MainActivity.this, "Invalid URL");
+        }
+    }
+
+    private void startDownloadTask(URL imageURL) {
+        if (imageURL != null) {
+            int newTaskId = boundService.startImageDownload(imageURL);
+            DRReporter.reportTaskStatus(this, newTaskId, "Created");
+        } else {
+            DRReporter.reportError(this, "Can't cast string to URL");
+        }
+    }
+
     private boolean isValidURL(String url) {
         return Patterns.WEB_URL.matcher(url).matches();
+    }
+
+    private URL urlFromString(String urlString) {
+        try {
+            return new URL(urlString);
+        } catch (MalformedURLException e) {
+            return null;
+        }
     }
 
     private void startService() {
