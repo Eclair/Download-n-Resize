@@ -9,6 +9,7 @@ import android.os.Looper;
 import com.eclair.downloadnresize.models.Task;
 
 import java.io.*;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -23,12 +24,12 @@ public class ImageDownloadAsyncTask extends AsyncTask<Task, Float, Bitmap> {
     };
 
     private Context context;
-    private ImageDownloadProgressUpdate progressUpdate;
+    private WeakReference<ImageDownloadProgressUpdate> progressUpdate;
     private Task currentTask;
 
     public ImageDownloadAsyncTask(Context context, ImageDownloadProgressUpdate progressUpdate) {
         this.context = context;
-        this.progressUpdate = progressUpdate;
+        this.progressUpdate = new WeakReference<ImageDownloadProgressUpdate>(progressUpdate);
     }
 
     private String extensionFromFileName(URL url) {
@@ -44,37 +45,37 @@ public class ImageDownloadAsyncTask extends AsyncTask<Task, Float, Bitmap> {
     }
 
     private void onProgressUpdate(final float progress) {
-        if (progressUpdate == null) {
+        if (progressUpdate.get() == null) {
             return;
         }
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                progressUpdate.onProgressUpdate(currentTask.id, progress);
+                progressUpdate.get().onProgressUpdate(currentTask.id, progress);
             }
         });
     }
 
     private void onSuccess(final Bitmap bitmap) {
-        if (progressUpdate == null) {
+        if (progressUpdate.get() == null) {
             return;
         }
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                progressUpdate.onSuccess(currentTask.id, bitmap);
+                progressUpdate.get().onSuccess(currentTask.id, bitmap);
             }
         });
     }
 
     private void onError(final String error) {
-        if (progressUpdate == null) {
+        if (progressUpdate.get() == null) {
             return;
         }
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                progressUpdate.onError(currentTask.id, error);
+                progressUpdate.get().onError(currentTask.id, error);
             }
         });
     }

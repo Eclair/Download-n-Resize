@@ -9,6 +9,7 @@ import com.eclair.downloadnresize.helpers.DRReporter;
 import com.eclair.downloadnresize.models.Task;
 import com.eclair.downloadnresize.network.ImageDownloadAsyncTask;
 
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,21 @@ public class DRService extends Service {
         }
     };
 
+    public interface ServiceListener {
+        void onTaskUpdate(Task task);
+    };
+
     private final DRBinder binder = new DRBinder();
     private List<Task> taskList;
+    private WeakReference<ServiceListener> listener;
 
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
+    }
+
+    public void setServiceListener(ServiceListener listener) {
+        this.listener = new WeakReference<ServiceListener>(listener);
     }
 
     public int startImageDownload(URL imageURL) {
