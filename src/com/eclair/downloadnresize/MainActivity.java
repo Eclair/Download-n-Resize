@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 
     private void startDownloadTask(URL imageURL) {
         if (imageURL != null) {
-            if (boundService != null) {
+            if (isServiceBound) {
                 int newTaskId = boundService.startImageDownload(imageURL);
                 DRReporter.reportTaskStatus(this, newTaskId, "Created");
             } else {
@@ -146,6 +146,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            boundService = null;
             isServiceBound = false;
         }
     };
