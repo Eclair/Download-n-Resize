@@ -10,12 +10,12 @@ import java.net.URL;
 public class Task {
     public int id;
     public TaskState state;
-    public URL webUri;
+    public URL webURL;
     public Uri imageUri;
 
-    public Task(int id, URL webUri) {
+    public Task(int id, URL webURL) {
         this.id = id;
-        this.webUri = webUri;
+        this.webURL = webURL;
     }
 
     public enum TaskState {
