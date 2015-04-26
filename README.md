@@ -1,5 +1,5 @@
 # Download-n-Resize
-Simple Android Application to download image(s) from URL(s) and resize them to 320x480
+Simple Android Application to download image(s) from URL(s) and resize them to 320x480 using bound service.
 
 # UI Concept (Mockups)
 ![Download-n-Resize Mockup](https://raw.githubusercontent.com/Eclair/Download-n-Resize/master/images/DnR-mockup.png)
