@@ -102,12 +102,6 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        stopService();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.service_control_actions, menu);
