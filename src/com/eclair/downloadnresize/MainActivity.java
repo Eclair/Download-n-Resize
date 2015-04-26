@@ -15,7 +15,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import com.eclair.downloadnresize.adapters.TaskListAdapter;
 import com.eclair.downloadnresize.helpers.DRReporter;
+import com.eclair.downloadnresize.models.Task;
 import com.eclair.downloadnresize.service.DRService;
 
 import java.net.URL;
@@ -26,6 +28,8 @@ public class MainActivity extends Activity {
     private ImageButton downloadButton;
     private ImageButton clearButton;
     private ListView tasksListView;
+
+    private TaskListAdapter taskListAdapter;
 
     private boolean isServiceBound;
     private DRService boundService;
@@ -50,6 +54,9 @@ public class MainActivity extends Activity {
                 urlField.setText("");
             }
         });
+
+        taskListAdapter = new TaskListAdapter(this);
+        tasksListView.setAdapter(taskListAdapter);
     }
 
     private void bindWidgets() {
@@ -70,8 +77,8 @@ public class MainActivity extends Activity {
     private void startDownloadTask(URL imageURL) {
         if (imageURL != null) {
             if (isServiceBound) {
-                int newTaskId = boundService.startImageDownload(imageURL);
-                DRReporter.reportTaskStatus(this, newTaskId, "Created");
+                Task task = boundService.startImageDownload(imageURL);
+                taskListAdapter.addTask(task);
             } else {
                 DRReporter.reportError(this, "Service unbound");
             }
@@ -96,6 +103,7 @@ public class MainActivity extends Activity {
         if (!isServiceBound) {
             Intent intent = new Intent(this, DRService.class);
             bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+            taskListAdapter.clearTasks();
             DRReporter.reportServiceStatus(this, "Service Started");
         }
     }
@@ -141,6 +149,8 @@ public class MainActivity extends Activity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             DRService.DRBinder binder = (DRService.DRBinder)service;
             boundService = binder.getService();
+            boundService.setServiceListener(serviceListener);
+            taskListAdapter.clearTasks();
             isServiceBound = true;
         }
 
@@ -148,6 +158,13 @@ public class MainActivity extends Activity {
         public void onServiceDisconnected(ComponentName name) {
             boundService = null;
             isServiceBound = false;
+        }
+    };
+
+    private DRService.ServiceListener serviceListener = new DRService.ServiceListener() {
+        @Override
+        public void onTaskUpdate(Task task) {
+            taskListAdapter.updateTask(task);
         }
     };
 }

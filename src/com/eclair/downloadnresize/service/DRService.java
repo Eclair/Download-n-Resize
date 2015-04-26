@@ -41,34 +41,44 @@ public class DRService extends Service {
         this.listener = new WeakReference<ServiceListener>(listener);
     }
 
-    public int startImageDownload(URL imageURL) {
+    public Task startImageDownload(URL imageURL) {
         if (taskList == null) {
             taskList = new ArrayList<Task>();
         }
 
         Task newTask = new Task(taskList.size(), imageURL);
+        newTask.state = Task.TaskState.Downloading;
         taskList.add(newTask);
 
         (new ImageDownloadAsyncTask(getApplicationContext(), progressUpdate)).execute(newTask);
 
-        return newTask.id;
+        return newTask;
     }
 
     private ImageDownloadAsyncTask.ImageDownloadProgressUpdate progressUpdate = new ImageDownloadAsyncTask.ImageDownloadProgressUpdate() {
         @Override
         public void onProgressUpdate(int taskId, float progress) {
-            DRReporter.reportTaskStatus(getApplicationContext(), taskId, "" + progress);
+            taskList.get(taskId).progress = progress;
+            if (listener.get() != null) {
+                listener.get().onTaskUpdate(taskList.get(taskId));
+            }
         }
 
         @Override
         public void onSuccess(int taskId, Bitmap bitmap) {
-            DRReporter.reportTaskStatus(getApplicationContext(), taskId, "Success");
+            taskList.get(taskId).state = Task.TaskState.Resizing;
+            if (listener.get() != null) {
+                listener.get().onTaskUpdate(taskList.get(taskId));
+            }
             // TODO: Implement bitmap resizing
         }
 
         @Override
         public void onError(int taskId, String error) {
-            DRReporter.reportTaskStatus(getApplicationContext(), taskId, "Error: " + error);
+            taskList.get(taskId).state = Task.TaskState.Failed;
+            if (listener.get() != null) {
+                listener.get().onTaskUpdate(taskList.get(taskId));
+            }
         }
     };
 }

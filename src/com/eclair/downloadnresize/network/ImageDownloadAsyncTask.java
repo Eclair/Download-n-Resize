@@ -90,6 +90,11 @@ public class ImageDownloadAsyncTask extends AsyncTask<Task, Float, Bitmap> {
             URLConnection connection = currentTask.webURL.openConnection();
             connection.connect();
 
+            if (connection.getHeaderField("Content-Type") == null) {
+                onError("Can't load URL");
+                return null;
+            }
+
             if (!isImage(connection)) {
                 onError("URL is not an image");
                 return null;
