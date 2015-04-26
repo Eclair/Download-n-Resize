@@ -62,6 +62,13 @@ public class DRService extends Service {
     private void resizeBitmapImageForTask(int taskId) {
         taskList.get(taskId).bitmap = DRBitmapResizer.resizeBitmapToSize(taskList.get(taskId).bitmap, ImageWidth, ImageHeight);
 
+        if (!DRGallerySave.saveToGallery(getApplicationContext(), taskList.get(taskId).bitmap)) {
+            DRReporter.reportTaskStatus(getApplicationContext(), taskId, "Failed to save image");
+            taskList.get(taskId).state = Task.TaskState.Failed;
+        } else {
+            taskList.get(taskId).state = Task.TaskState.Done;
+        }
+
         if (listener.get() != null) {
             listener.get().onTaskUpdate(taskList.get(taskId));
         }
