@@ -5,8 +5,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,12 +33,28 @@ public class MainActivity extends Activity {
         setContentView(R.layout.main);
 
         bindWidgets();
+
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String URL = urlField.getText().toString().trim();
+                if (isValidURL(URL)) {
+                    boundService.startImageDownload(Uri.parse(URL));
+                } else {
+                    DRReporter.reportError(MainActivity.this, "Invalid URL");
+                }
+            }
+        });
     }
 
     private void bindWidgets() {
         urlField = (EditText)findViewById(R.id.urlField);
         downloadButton = (ImageButton)findViewById(R.id.downloadButton);
         tasksListView = (ListView)findViewById(R.id.tasksListView);
+    }
+
+    private boolean isValidURL(String url) {
+        return Patterns.WEB_URL.matcher(url).matches();
     }
 
     private void startService() {
