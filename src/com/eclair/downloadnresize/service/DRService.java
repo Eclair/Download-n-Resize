@@ -3,6 +3,7 @@ package com.eclair.downloadnresize.service;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import com.eclair.downloadnresize.helpers.DRBitmapResizer;
@@ -54,7 +55,7 @@ public class DRService extends Service {
         newTask.state = Task.TaskState.Downloading;
         taskList.add(newTask);
 
-        (new ImageDownloadAsyncTask(getApplicationContext(), progressUpdate)).execute(newTask);
+        (new ImageDownloadAsyncTask(getApplicationContext(), progressUpdate)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, newTask);
 
         return newTask;
     }
